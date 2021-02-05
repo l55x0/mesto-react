@@ -16,5 +16,4 @@
 * Использовать в работе React Hooks (useState, useEffect) :white_check_mark:
 * Реализовать открытие всех Попапов Форм и Карточки :white_check_mark:
 * Использовать Api для получения информации с сервера :white_check_mark:
-*  :white_check_mark:
 * Переписать классы на функциональные компоненты :white_check_mark:
