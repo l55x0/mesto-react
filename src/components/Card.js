@@ -3,7 +3,7 @@ function Card(props) {
     <article className="place">
       <img
         className="place__image"
-        alt="Картинка"
+        alt={props.title}
         src={props.src}
         onClick={props.handleClick}
       />

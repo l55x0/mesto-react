@@ -1,4 +1,4 @@
-import api from '../utils/Api.js'
+import api from '../utils/api.js'
 import { useEffect, useState } from 'react';
 import Card from './Card.js';
 
@@ -55,12 +55,14 @@ function Main(props) {
       {isLoading
         ? <p>Loading...</p>
         : (<section className={"places content__item"}>
-          {cards.map(item =>
+          {cards.map(item => (
             <Card
               key={item.id}
               {...item}
               handleClick={() => { props.onCardClick(item) }}
-            />)}
+            />
+          )
+          )}
         </section>)
       }
     </main>

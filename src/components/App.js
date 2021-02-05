@@ -47,7 +47,7 @@ function App() {
         title={"Редактировать профиль"}
         textButton={"Сохранить"}
         isOpen={isEditProfilePopupOpen}
-        onClose={() => { closeAllPopups() }}
+        onClose={closeAllPopups}
       >
         <input className={"popup__input popup__input_type_author"} type={"text"} placeholder={"Ваше имя"}
           name={"popup-input-name"} minLength={"2"} maxLength={"40"} required />
@@ -62,7 +62,7 @@ function App() {
         title={"Новое место"}
         textButton={"Создать"}
         isOpen={isAddPlacePopupOpen}
-        onClose={() => { closeAllPopups() }}
+        onClose={closeAllPopups}
       >
         <input className="popup__input popup__input_type_place-name" type="text" placeholder="Название"
           name="popup-input-place-name" minLength="2" maxLength="30" required />
@@ -77,7 +77,7 @@ function App() {
         title={"Обновить аватар"}
         textButton={"Обновить"}
         isOpen={isEditAvatarPopupOpen}
-        onClose={() => { closeAllPopups() }}
+        onClose={closeAllPopups}
       >
         <input className="popup__input popup__input_type_photo" type="url" placeholder="Ссылка на аватар"
           name="popup-input-url-avatar" required />
@@ -92,7 +92,7 @@ function App() {
 
       <ImagePopup
         card={selectedCard}
-        onClose={() => { closeAllPopups() }}
+        onClose={closeAllPopups}
       />
     </div>
   );
