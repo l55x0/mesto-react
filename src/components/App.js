@@ -20,9 +20,10 @@ function App() {
     setSelectedCard({ isOpen: false })
   }
 
-  const handleCardClick = (data) => {
-    setSelectedCard({ isOpen: true, ...data })
-  }
+  const handleEditProfileClick = () => { setIsEditProfilePopupOpen(true) }
+  const handleAddPlaceClick = () => { setIsAddPlacePopupOpen(true) }
+  const handleEditAvatarClick = () => { setIsEditAvatarPopupOpen(true) }
+  const handleCardClick = (data) => { setSelectedCard({ isOpen: true, ...data }) }
 
   return (
     <div className={"page__container"}>
@@ -33,9 +34,9 @@ function App() {
 
       <Main
         altAvatar={"Изображение Автора"}
-        onEditProfile={() => { setIsEditProfilePopupOpen(true) }}
-        onAddPlace={() => { setIsAddPlacePopupOpen(true) }}
-        onEditAvatar={() => { setIsEditAvatarPopupOpen(true) }}
+        onEditProfile={handleEditProfileClick}
+        onAddPlace={handleAddPlaceClick}
+        onEditAvatar={handleEditAvatarClick}
         onCardClick={(data) => { handleCardClick(data) }}
       />
 
