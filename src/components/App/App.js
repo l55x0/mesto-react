@@ -8,14 +8,20 @@ import ImagePopup from '../ImagePopup/ImagePopup';
 
 
 function App() {
-  const [isEditProfilePopupOpen, getIsEditProfilePopupOpen] = useState(false);
-  const [isAddPlacePopupOpen, getIsAddPlacePopupOpen] = useState(false);
-  const [isEditAvatarPopupOpen, getIsEditAvatarPopupOpen] = useState(false);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState({ isOpen: false });
 
   function closeAllPopups() {
-    getIsEditProfilePopupOpen(false)
-    getIsAddPlacePopupOpen(false)
-    getIsEditAvatarPopupOpen(false)
+    setIsEditProfilePopupOpen(false)
+    setIsAddPlacePopupOpen(false)
+    setIsEditAvatarPopupOpen(false)
+    setSelectedCard({ isOpen: false })
+  }
+
+  const handleCardClick = (data) => {
+    setSelectedCard({ isOpen: true, ...data })
   }
 
   return (
@@ -27,9 +33,10 @@ function App() {
 
       <Main
         altAvatar={"Изображение Автора"}
-        onEditProfile={() => { getIsEditProfilePopupOpen(true) }}
-        onAddPlace={() => { getIsAddPlacePopupOpen(true) }}
-        onEditAvatar={() => { getIsEditAvatarPopupOpen(true) }}
+        onEditProfile={() => { setIsEditProfilePopupOpen(true) }}
+        onAddPlace={() => { setIsAddPlacePopupOpen(true) }}
+        onEditAvatar={() => { setIsEditAvatarPopupOpen(true) }}
+        onCardClick={(data) => { handleCardClick(data) }}
       />
 
       <Footer text={"2020 Mesto Russia Lod55"} />
@@ -83,8 +90,8 @@ function App() {
       />
 
       <ImagePopup
-        srcImage={"#"}
-        text={""}
+        card={selectedCard}
+        onClose={() => { closeAllPopups() }}
       />
     </div>
   );
