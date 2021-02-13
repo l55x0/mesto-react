@@ -36,7 +36,7 @@ https://lod55.github.io/mesto-react/
 Скопируйте проект на компьютер:
 
 ```
-git clone https://github.com/
+git clone https://github.com/Lod55/mesto-react.git
 ```
 
 Установите зависимости:
