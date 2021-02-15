@@ -10,10 +10,10 @@ function ImagePopup(props) {
         </button>
         <img
           className="popup__image"
-          alt="Картинка"
-          src={props.card.src}
+          alt={props.card.name}
+          src={props.card.link}
         />
-        <figcaption className="popup__caption">{props.card.title}</figcaption>
+        <figcaption className="popup__caption">{props.card.name}</figcaption>
       </figure>
     </section>
   );

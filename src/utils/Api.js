@@ -63,9 +63,9 @@ class Api {
       .then(res => res.ok ? res.json() : Promise.reject(`Ошибка ${res.status}`))
   }
 
-  addLike(id) {
+  changeLikeCardStatus(id, isLiked) {
     return fetch(`${this._address}/${this._groupId}/cards/likes/${id}`, {
-      method: 'PUT',
+      method: isLiked ? 'DELETE' : 'PUT',
       headers: {
         authorization: this._token,
       }
@@ -73,15 +73,25 @@ class Api {
       .then(res => res.ok ? res.json() : Promise.reject(`Ошибка ${res.status}`))
   }
 
-  removeLike(id) {
-    return fetch(`${this._address}/${this._groupId}/cards/likes/${id}`, {
-      method: 'DELETE',
-      headers: {
-        authorization: this._token,
-      }
-    })
-      .then(res => res.ok ? res.json() : Promise.reject(`Ошибка ${res.status}`))
-  }
+  // addLike(id) {
+  //   return fetch(`${this._address}/${this._groupId}/cards/likes/${id}`, {
+  //     method: 'PUT',
+  //     headers: {
+  //       authorization: this._token,
+  //     }
+  //   })
+  //     .then(res => res.ok ? res.json() : Promise.reject(`Ошибка ${res.status}`))
+  // }
+
+  // removeLike(id) {
+  //   return fetch(`${this._address}/${this._groupId}/cards/likes/${id}`, {
+  //     method: 'DELETE',
+  //     headers: {
+  //       authorization: this._token,
+  //     }
+  //   })
+  //     .then(res => res.ok ? res.json() : Promise.reject(`Ошибка ${res.status}`))
+  // }
 
   editUserAvatar(data) {
     return fetch(`${this._address}/${this._groupId}/users/me/avatar`, {
