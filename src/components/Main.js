@@ -23,10 +23,20 @@ function Main(props) {
     const isLiked = card.likes.some(item => item._id === currentUser._id);
 
     api.changeLikeCardStatus(card._id, isLiked)
-      .then((res) => {
+      .then(res => {
         const newCards = cards.map(item => item._id === card._id ? res : item);
         setCards(newCards);
-      });
+      })
+      .catch(err => console.log(`Error: ${err}`));
+  }
+
+  function handleCardDelete(card) {
+    api.removeCard(card._id)
+      .then(res => {
+        const newCards = cards.filter(item => item._id === card._id ? null : item);
+        setCards(newCards);
+      })
+      .catch(err => console.log(`Error: ${err}`));
   }
 
   return (
@@ -53,6 +63,7 @@ function Main(props) {
               card={item}
               handleClick={props.onCardClick}
               onCardLike={handleCardLike}
+              onCardDelete={handleCardDelete}
             />
           )
           )}

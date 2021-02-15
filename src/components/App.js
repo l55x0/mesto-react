@@ -7,11 +7,13 @@ import Main from './Main';
 import Footer from './Footer';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
+import EditProfilePopup from './EditProfilePopup';
 
 
 function App() {
   const [currentUser, setCurrentUser] = useState({
-    name: "Loading..."
+    name: 'Loading...',
+    about: ''
   });
 
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -39,6 +41,15 @@ function App() {
   const handleEditAvatarClick = () => { setIsEditAvatarPopupOpen(true) }
   const handleCardClick = (data) => { setSelectedCard({ isOpen: true, ...data }) }
 
+  function handleUpdateUser({ name, about }) {
+    api.setInfoUser({ name, about })
+      .then(res => {
+        setCurrentUser(res);
+        closeAllPopups();
+      })
+      .catch(err => console.log(`Error: ${err}`));
+  }
+
   return (
     <div className={"page__container"}>
       <CurrentUserContext.Provider value={currentUser}>
@@ -57,20 +68,11 @@ function App() {
 
         <Footer text={"2020 Mesto Russia Lod55"} />
 
-        <PopupWithForm
-          name={"popup-profile"}
-          title={"Редактировать профиль"}
-          textButton={"Сохранить"}
+        <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
-        >
-          <input className={"popup__input popup__input_type_author"} type={"text"} placeholder={"Ваше имя"}
-            name={"popup-input-name"} minLength={"2"} maxLength={"40"} required />
-          <span id={"popup-input-name-error"} className={"popup__error"}></span>
-          <input className={"popup__input popup__input_type_status"} type={"text"} placeholder={"Расскажите о себе"}
-            name={"popup-input-status"} minLength={"2"} maxLength={"200"} required />
-          <span id={"popup-input-status-error"} className={"popup__error"}></span>
-        </PopupWithForm>
+          onUpdateUser={handleUpdateUser}
+        />
 
         <PopupWithForm
           name={"popup-add-card"}
