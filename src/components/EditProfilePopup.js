@@ -6,11 +6,11 @@ function EditProfilePopup(props) {
   const currentUser = useContext(CurrentUserContext);
 
   const [name, setName] = useState(currentUser.name);
-  const [description, setDescription] = useState(currentUser.about);
+  const [about, setAbout] = useState(currentUser.about);
 
   useEffect(() => {
     setName(currentUser.name);
-    setDescription(currentUser.about);
+    setAbout(currentUser.about);
   }, [currentUser]);
 
   function handleSubmit(e) {
@@ -18,7 +18,7 @@ function EditProfilePopup(props) {
 
     props.onUpdateUser({
       name,
-      about: description,
+      about,
     });
   }
 
@@ -26,8 +26,8 @@ function EditProfilePopup(props) {
     setName(e.target.value);
   }
 
-  function handleChangeDescription(e) {
-    setDescription(e.target.value);
+  function handleChangeAbout(e) {
+    setAbout(e.target.value);
   }
 
   return (
@@ -41,7 +41,8 @@ function EditProfilePopup(props) {
     >
       <input
         className={"popup__input popup__input_type_author"}
-        type={"text"} placeholder={"Ваше имя"}
+        type={"text"}
+        placeholder={"Ваше имя"}
         name={"popup-input-name"}
         minLength={"2"}
         maxLength={"40"}
@@ -52,12 +53,13 @@ function EditProfilePopup(props) {
       <span id={"popup-input-name-error"} className={"popup__error"}></span>
       <input
         className={"popup__input popup__input_type_status"}
-        type={"text"} placeholder={"Расскажите о себе"}
+        type={"text"}
+        placeholder={"Расскажите о себе"}
         name={"popup-input-status"}
         minLength={"2"}
         maxLength={"200"}
-        value={description}
-        onChange={handleChangeDescription}
+        value={about}
+        onChange={handleChangeAbout}
         required
       />
       <span id={"popup-input-status-error"} className={"popup__error"}></span>

@@ -8,6 +8,7 @@ import Footer from './Footer';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 import EditProfilePopup from './EditProfilePopup';
+import EditAvatarPopup from './EditAvatarPopup';
 
 
 function App() {
@@ -43,6 +44,15 @@ function App() {
 
   function handleUpdateUser({ name, about }) {
     api.setInfoUser({ name, about })
+      .then(res => {
+        setCurrentUser(res);
+        closeAllPopups();
+      })
+      .catch(err => console.log(`Error: ${err}`));
+  }
+
+  function handleUpdateAvatar({ avatar }) {
+    api.setUserAvatar({ avatar })
       .then(res => {
         setCurrentUser(res);
         closeAllPopups();
@@ -89,17 +99,11 @@ function App() {
           <span id="popup-input-url-error" className="popup__error"></span>
         </PopupWithForm>
 
-        <PopupWithForm
-          name={"popup-add-avatar"}
-          title={"Обновить аватар"}
-          textButton={"Обновить"}
+        <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
-        >
-          <input className="popup__input popup__input_type_photo" type="url" placeholder="Ссылка на аватар"
-            name="popup-input-url-avatar" required />
-          <span id="popup-input-url-avatar-error" className="popup__error"></span>
-        </PopupWithForm>
+          onUpdateAvatar={handleUpdateAvatar}
+        />
 
         <PopupWithForm
           name={"popup-remove-card"}

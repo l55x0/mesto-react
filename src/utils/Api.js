@@ -73,7 +73,7 @@ class Api {
       .then(res => res.ok ? res.json() : Promise.reject(`Ошибка ${res.status}`))
   }
 
-  setUserAvatar(data) {
+  setUserAvatar({ avatar }) {
     return fetch(`${this._address}/${this._groupId}/users/me/avatar`, {
       method: 'PATCH',
       headers: {
@@ -81,7 +81,7 @@ class Api {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        avatar: data['popup-input-url-avatar'],
+        avatar,
       })
     })
       .then(res => res.ok ? res.json() : Promise.reject(`Ошибка ${res.status}`))
