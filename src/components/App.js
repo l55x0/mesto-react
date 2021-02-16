@@ -9,8 +9,7 @@ import ImagePopup from './ImagePopup';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
-
-
+import RemovePlacePopup from './RemovePlacePopup';
 
 function App() {
   const [currentUser, setCurrentUser] = useState({
@@ -20,9 +19,11 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isRemovePlacePopupOpen, setIsRemovePlacePopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({ isOpen: false });
   const [cards, setCards] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [useCardId, setUseCardId] = useState('');
 
 
   useEffect(() => {
@@ -47,6 +48,7 @@ function App() {
     setIsEditProfilePopupOpen(false)
     setIsAddPlacePopupOpen(false)
     setIsEditAvatarPopupOpen(false)
+    setIsRemovePlacePopupOpen(false)
     setSelectedCard({ isOpen: false })
   }
 
@@ -60,6 +62,11 @@ function App() {
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true)
+  }
+
+  function handleTrashClick(card) {
+    setIsRemovePlacePopupOpen(true)
+    setUseCardId(card._id)
   }
 
   function handleCardClick(data) {
@@ -95,11 +102,12 @@ function App() {
       .catch(err => console.log(`Error: ${err}`));
   }
 
-  function handleCardDelete(card) {
-    api.removeCard(card._id)
+  function handleCardDelete() {
+    api.removeCard(useCardId)
       .then(res => {
-        const newCards = cards.filter(item => item._id === card._id ? null : item);
+        const newCards = cards.filter(item => item._id === useCardId ? null : item);
         setCards(newCards);
+        closeAllPopups();
       })
       .catch(err => console.log(`Error: ${err}`));
   }
@@ -129,7 +137,7 @@ function App() {
           onCardClick={handleCardClick}
           cards={cards}
           onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
+          onCardDelete={handleTrashClick}
           isLoading={isLoading}
         />
 
@@ -153,12 +161,11 @@ function App() {
           onUpdateAvatar={handleUpdateAvatar}
         />
 
-        {/* Форма подтверждения удаления карточки
-        <PopupWithForm
-          name={"popup-remove-card"}
-          title={"Вы уверены?"}
-          textButton={"Да"}
-        /> */}
+        <RemovePlacePopup
+          isOpen={isRemovePlacePopupOpen}
+          onClose={closeAllPopups}
+          onDeleteCard={handleCardDelete}
+        />
 
         <ImagePopup
           card={selectedCard}
