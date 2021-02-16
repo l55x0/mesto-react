@@ -37,10 +37,21 @@ function App() {
     setSelectedCard({ isOpen: false })
   }
 
-  const handleEditProfileClick = () => { setIsEditProfilePopupOpen(true) }
-  const handleAddPlaceClick = () => { setIsAddPlacePopupOpen(true) }
-  const handleEditAvatarClick = () => { setIsEditAvatarPopupOpen(true) }
-  const handleCardClick = (data) => { setSelectedCard({ isOpen: true, ...data }) }
+  function handleEditProfileClick() {
+    setIsEditProfilePopupOpen(true)
+  }
+
+  function handleAddPlaceClick() {
+    setIsAddPlacePopupOpen(true)
+  }
+
+  function handleEditAvatarClick() {
+    setIsEditAvatarPopupOpen(true)
+  }
+
+  function handleCardClick(data) {
+    setSelectedCard({ isOpen: true, ...data })
+  }
 
   function handleUpdateUser({ name, about }) {
     api.setInfoUser({ name, about })
