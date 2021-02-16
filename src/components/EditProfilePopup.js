@@ -5,26 +5,29 @@ import PopupWithForm from './PopupWithForm';
 function EditProfilePopup(props) {
   const currentUser = useContext(CurrentUserContext);
 
-  const [name, setName] = useState(currentUser.name);
-  const [about, setAbout] = useState(currentUser.about);
+  const [inputName, setInputName] = useState(currentUser.name);
+  const [inputAbout, setInputAbout] = useState(currentUser.about);
 
   useEffect(() => {
-    setName(currentUser.name);
-    setAbout(currentUser.about);
+    setInputName(currentUser.name);
+    setInputAbout(currentUser.about);
   }, [currentUser]);
 
   function handleSubmit(e) {
     e.preventDefault();
 
-    props.onUpdateUser({ name, about });
+    props.onUpdateUser({
+      name: inputName,
+      about: inputAbout
+    });
   }
 
   function handleChangeName(e) {
-    setName(e.target.value);
+    setInputName(e.target.value);
   }
 
   function handleChangeAbout(e) {
-    setAbout(e.target.value);
+    setInputAbout(e.target.value);
   }
 
   return (
@@ -43,7 +46,7 @@ function EditProfilePopup(props) {
         name={"popup-input-name"}
         minLength={"2"}
         maxLength={"40"}
-        value={name}
+        value={inputName}
         onChange={handleChangeName}
         required
       />
@@ -55,7 +58,7 @@ function EditProfilePopup(props) {
         name={"popup-input-status"}
         minLength={"2"}
         maxLength={"200"}
-        value={about}
+        value={inputAbout}
         onChange={handleChangeAbout}
         required
       />

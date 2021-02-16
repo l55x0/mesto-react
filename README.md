@@ -17,7 +17,7 @@ https://lod55.github.io/mesto-react/
 ## В работе использовались:
 - [X] Проект запущен на CRA
 - [X] React
-- [X] React Hooks (useState, useEffect, useRef)
+- [X] React Hooks (useState, useEffect)
 - [X] React Context (createContext, useContext)
 
 
