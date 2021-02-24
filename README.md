@@ -1,6 +1,6 @@
 <h1 align="center">
   Mesto React
-</p>
+</h1>
 
 <p align="center">
   Проект в процессе разработки...
@@ -15,8 +15,12 @@
 https://lod55.github.io/mesto-react/
 
 ## В работе использовались:
-- [X] Проект запущен на CRA
-- [X] React
+- [X] Проект запущен на Create React App (CRA)
+- [X] git
+- [X] HTML
+- [X] CSS 
+- [X] JS
+- [X] React JS
 - [X] React Hooks (useState, useEffect)
 - [X] React Context (createContext, useContext)
 
