@@ -1,7 +1,9 @@
-function Footer(props) {
+import React from 'react';
+
+function Footer() {
   return (
     <footer className={"footer page__footer"}>
-      <p className={"footer__author"}>&copy; {props.text}</p>
+      <p className={"footer__author"}>&copy; 2020 Mesto Russia Lod55</p>
     </footer>
   );
 }

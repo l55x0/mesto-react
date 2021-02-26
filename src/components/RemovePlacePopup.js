@@ -1,9 +1,10 @@
+import React from 'react';
 import PopupWithForm from './PopupWithForm';
 
-function RemovePlacePopup(props) {
-  function handleSubmit(e) {
+function RemovePlacePopup({ onDeleteCard, isOpen, onClose }) {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    props.onDeleteCard();
+    onDeleteCard();
   }
 
   return (
@@ -11,8 +12,8 @@ function RemovePlacePopup(props) {
       name={"popup-remove-card"}
       title={"Вы уверены?"}
       textButton={"Да"}
-      isOpen={props.isOpen}
-      onClose={props.onClose}
+      isOpen={isOpen}
+      onClose={onClose}
       onSubmit={handleSubmit}
     />
 

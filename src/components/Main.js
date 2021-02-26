@@ -1,36 +1,36 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import Card from './Card.js';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 
-function Main(props) {
+function Main({ onEditAvatar, onEditProfile, onAddPlace, isLoading, cards, onCardClick, onCardLike, onCardTrash }) {
   const currentUser = useContext(CurrentUserContext);
 
   return (
     <main className={"content page__content"}>
       <section className={"profile content__item"}>
-        <div className={"profile__overlay"} onClick={props.onEditAvatar}>
-          <img src={currentUser.avatar} alt={props.altAvatar} className={"profile__avatar"} />
+        <div className={"profile__overlay"} onClick={onEditAvatar}>
+          <img src={currentUser.avatar} alt={`Аватар ${currentUser.name}`} className={"profile__avatar"} />
         </div>
         <div className={"profile__text-block"}>
           <div className={"profile__row-block"}>
             <h1 className={"profile__author"}>{currentUser.name}</h1>
-            <button className={"button profile__button-edit"} type={"button"} onClick={props.onEditProfile}></button>
+            <button className={"button profile__button-edit"} type={"button"} onClick={onEditProfile}></button>
           </div>
           <p className={"profile__status"}>{currentUser.about}</p>
         </div>
-        <button className={"button profile__button-add"} type={"button"} onClick={props.onAddPlace}></button>
+        <button className={"button profile__button-add"} type={"button"} onClick={onAddPlace}></button>
       </section>
-      {props.isLoading
+      {isLoading
         ? <p>Loading...</p>
         : (<section className={"places content__item"}>
-          {props.cards.map(item => (
+          {cards.map(item => (
             <Card
               key={item._id}
               card={item}
-              handleClick={props.onCardClick}
-              onCardLike={props.onCardLike}
-              onCardDelete={props.onCardDelete}
+              handleClick={onCardClick}
+              onCardLike={onCardLike}
+              onCardTrash={onCardTrash}
             />
           )
           )}

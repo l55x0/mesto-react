@@ -1,19 +1,15 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import PopupWithForm from './PopupWithForm';
 
-function EditAvatarPopup(props) {
+function EditAvatarPopup({ onUpdateAvatar, isOpen, onClose }) {
   const [inputValue, setInputValue] = useState('');
 
-  function handleChangeAvatar(e) {
-    setInputValue(e.target.value);
-  }
+  const handleChangeAvatar = (e) => setInputValue(e.target.value);
 
-  function handleSubmit(e) {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    props.onUpdateAvatar({
-      avatar: inputValue,
-    });
+    onUpdateAvatar({ avatar: inputValue });
     setInputValue('');
   }
 
@@ -22,8 +18,8 @@ function EditAvatarPopup(props) {
       name={"popup-add-avatar"}
       title={"Обновить аватар"}
       textButton={"Обновить"}
-      isOpen={props.isOpen}
-      onClose={props.onClose}
+      isOpen={isOpen}
+      onClose={onClose}
       onSubmit={handleSubmit}
     >
       <input
@@ -32,6 +28,8 @@ function EditAvatarPopup(props) {
         placeholder={"Ссылка на аватар"}
         name={"popup-input-url-avatar"}
         onChange={handleChangeAvatar}
+        minLength={"7"}
+        maxLength={"300"}
         value={inputValue}
         required
       />

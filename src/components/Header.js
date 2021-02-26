@@ -1,7 +1,10 @@
-function Header({ srcLogo, altLogo }) {
+import React from 'react';
+import logo from '../images/Logo.svg';
+
+function Header() {
   return (
     <header className={"header page__header"}>
-      <img src={srcLogo} alt={altLogo} className={"header__logo"} />
+      <img src={logo} alt={"Логотип проекта Места России"} className={"header__logo"} />
     </header>
   );
 }

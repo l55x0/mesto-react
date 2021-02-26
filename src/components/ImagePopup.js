@@ -1,19 +1,22 @@
-function ImagePopup(props) {
-  const className = `popup popup_blackout ${props.card.isOpen ? 'popup_opened' : ''}`;
+import React from 'react';
+
+function ImagePopup({ card, onClose }) {
+  const className = `popup popup_blackout ${card.isOpen ? 'popup_opened' : ''}`;
+
   return (
     <section className={className} id="popup-image">
       <figure className="popup__figure">
         <button
           className="button popup__button-close"
           type="button"
-          onClick={props.onClose}>
+          onClick={onClose}>
         </button>
         <img
           className="popup__image"
-          alt={props.card.name}
-          src={props.card.link}
+          alt={card.name}
+          src={card.link}
         />
-        <figcaption className="popup__caption">{props.card.name}</figcaption>
+        <figcaption className="popup__caption">{card.name} / &copy; {card.owner.name}</figcaption>
       </figure>
     </section>
   );

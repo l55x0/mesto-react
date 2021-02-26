@@ -1,47 +1,44 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 
-function Card(props) {
+function Card({ card, onCardLike, handleClick, onCardTrash }) {
   const currentUser = useContext(CurrentUserContext);
-  const isOwn = props.card.owner._id === currentUser._id;
+
+  const isOwn = card.owner._id === currentUser._id;
+
   const cardDeleteButton = isOwn
     ? (<button className="button place__button-remove" type="button" onClick={handleDeleteClick} />)
-    : (null);
-  const isLiked = props.card.likes.some(item => item._id === currentUser._id);
-  const cardLikeButtonClassName = `button place__button-like ${isLiked
-    ? ('place__button-like_active')
-    : ''}`;
+    : null;
 
-  function handleLikeClick() {
-    props.onCardLike(props.card)
-  }
+  const isLiked = card.likes.some(item => item._id === currentUser._id);
 
-  function handleImageClick() {
-    props.handleClick(props.card)
-  }
+  const cardLikeButtonClassName = `button place__button-like 
+  ${isLiked
+      ? ('place__button-like_active')
+      : ''}`;
 
-  function handleDeleteClick() {
-    props.onCardDelete(props.card)
-  }
+  const handleLikeClick = () => onCardLike(card);
+  const handleImageClick = () => handleClick(card);
+  function handleDeleteClick() { onCardTrash(card) }
 
   return (
     <article className="place">
       <img
         className="place__image"
-        alt={props.card.name}
-        src={props.card.link}
+        alt={card.name}
+        src={card.link}
         onClick={handleImageClick}
       />
       {cardDeleteButton}
       <div className="place__row-block">
-        <h2 className="place__title">{props.card.name}</h2>
+        <h2 className="place__title">{card.name}</h2>
         <div className="place__column-block">
           <button className={cardLikeButtonClassName}
             type="button"
             onClick={handleLikeClick}
           />
-          <span className="place__score-like">{props.card.likes.length}</span>
+          <span className="place__score-like">{card.likes.length}</span>
         </div>
       </div>
     </article>
