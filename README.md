@@ -21,6 +21,7 @@ https://lod55.github.io/mesto-react/
 - [X] CSS (сверстана мобильная версия)
 - [X] JS (Api fetch)
 - [X] React JS
+- [X] JSX
 - [X] React Hooks (useState, useEffect, useCallback)
 - [X] React Context (createContext, useContext)
 - [X] React Router (useLocation, Route, Switch, Redirect, useHistory)
