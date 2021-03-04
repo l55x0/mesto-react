@@ -17,12 +17,13 @@ https://lod55.github.io/mesto-react/
 ## В работе использовались:
 - [X] Проект запущен на Create React App (CRA)
 - [X] git
-- [X] HTML
-- [X] CSS 
-- [X] JS
+- [X] HTML 
+- [X] CSS (сверстана мобильная версия)
+- [X] JS (Api fetch)
 - [X] React JS
-- [X] React Hooks (useState, useEffect)
+- [X] React Hooks (useState, useEffect, useCallback)
 - [X] React Context (createContext, useContext)
+- [X] React Router (useLocation, Route, Switch, Redirect, useHistory)
 
 
 
@@ -32,10 +33,11 @@ https://lod55.github.io/mesto-react/
 - [X] удалять карточки юзера
 - [X] ставить лайки
 - [X] открывать фотографии на весь экран
-- [ ] валидация форм при помощи JS
-- [ ] вход в приложение
-- [ ] информация о приложении + статистика
-- [ ] статистика юзера
+- [X] валидация всех форм
+- [X] регистрация
+- [X] авторизация
+- [X] выход из приложения
+
 
 ## Установка
 

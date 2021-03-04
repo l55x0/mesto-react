@@ -1,7 +1,15 @@
 import React from 'react';
 import PopupWithForm from './PopupWithForm';
 
-function RemovePlacePopup({ onDeleteCard, isOpen, onClose }) {
+const RemovePlacePopup = (props) => {
+  // Диструктуризированная переменная с пропсами
+  const {
+    onDeleteCard,
+    isOpen,
+    onClose
+  } = props;
+
+  // функция отправки формы
   const handleSubmit = (e) => {
     e.preventDefault();
     onDeleteCard();
@@ -9,14 +17,13 @@ function RemovePlacePopup({ onDeleteCard, isOpen, onClose }) {
 
   return (
     <PopupWithForm
-      name={"popup-remove-card"}
-      title={"Вы уверены?"}
-      textButton={"Да"}
+      name="remove-card"
+      title="Вы уверены?"
+      textButton="Да"
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
-    />
-
+      validationForm={true} />
   );
 }
 
