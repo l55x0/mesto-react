@@ -12,8 +12,17 @@ const PopupWithForm = (props) => {
     validationForm
   } = props;
 
+  const handleClose = (e) => {
+    if (e.target.classList.contains('popup')) {
+      onClose()
+    }
+    return;
+  }
+
   return (
-    <section className={`popup popup_type_${name} ${isOpen ? 'popup_opened' : ''}`}>
+    <section
+      onClick={handleClose}
+      className={`popup popup_type_${name} ${isOpen ? 'popup_opened' : ''}`}>
       <div className="popup__container">
         <button
           className="button popup__button-close"

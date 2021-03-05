@@ -25,8 +25,17 @@ const InfoTooltip = (props) => {
     ? success
     : fail
 
+  const handleClose = (e) => {
+    if (e.target.classList.contains('popup')) {
+      onClose()
+    }
+    return;
+  }
+
   return (
-    <section className={`popup popup_type_info-tooltip ${isOpen ? 'popup_opened' : ''}`}>
+    <section
+      onClick={handleClose}
+      className={`popup popup_type_info-tooltip ${isOpen ? 'popup_opened' : ''}`}>
       <div className="popup__container">
         <button
           className="button popup__button-close"

@@ -7,8 +7,16 @@ const ImagePopup = (props) => {
     onClose
   } = props;
 
+  const handleClose = (e) => {
+    if (e.target.classList.contains('popup')) {
+      onClose()
+    }
+    return;
+  }
+
   return (
     <section
+      onClick={handleClose}
       className={`popup popup_blackout 
     ${card.isOpen
           ? 'popup_opened'
