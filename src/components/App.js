@@ -57,8 +57,8 @@ const App = () => {
   }
 
   // Изменение аватара на сервере и отрисовка
-  const handleUpdateAvatar = ({ avatar }) => {
-    return api.setUserAvatar({ avatar })
+  const handleUpdateAvatar = (src) => {
+    return api.setUserAvatar(src)
       .then(res => {
         responseCheck(res);
         setCurrentUser(res);

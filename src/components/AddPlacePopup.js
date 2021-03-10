@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PopupWithForm from './PopupWithForm';
 
 const AddPlacePopup = (props) => {
@@ -15,11 +15,10 @@ const AddPlacePopup = (props) => {
     link: ''
   };
 
-  // Дефолтное значение валидации
+  // Дефолтное значение валидации инпутов
   const initialInputsValid = {
     name: false,
-    link: false,
-    form: false
+    link: false
   }
 
   // Дефолтное значение ошибок валидации и сабмита
@@ -30,7 +29,8 @@ const AddPlacePopup = (props) => {
 
   // Стейты компонента
   const [data, setData] = useState(initialData);
-  const [validations, setValidations] = useState(initialInputsValid);
+  const [validationsInputs, setValidationsInputs] = useState(initialInputsValid);
+  const [validationForm, setValidationForm] = useState(false);
   const [errorsValid, setErrorsValid] = useState(initialErrorsValid);
 
   // Функции компонента
@@ -40,32 +40,25 @@ const AddPlacePopup = (props) => {
   // --Закрытие формы
   // --Сабмит формы 
   const checkFormValid = () => {
-    if (!validations.name || !validations.link) {
-      return setValidations((data) => ({
-        ...data,
-        form: false
-      }))
-    } else {
-      return setValidations((data) => ({
-        ...data,
-        form: true
-      }))
-    }
+    !validationsInputs.name || !validationsInputs.link
+      ? setValidationForm(false)
+      : setValidationForm(true);
   }
+
+  // Контроль состояния инпутов
+  useEffect(checkFormValid, [validationsInputs])
 
   const handleChange = (e) => {
     const { name, value, validity, validationMessage } = e.target;
-
-    checkFormValid();
 
     setData(data => ({
       ...data,
       [name]: value,
     }));
 
-    setValidations(data => ({
+    setValidationsInputs(data => ({
       ...data,
-      [name]: validity.valid,
+      [name]: validity.valid
     }));
 
     setErrorsValid(data => ({
@@ -76,7 +69,8 @@ const AddPlacePopup = (props) => {
 
   const resetForm = () => {
     setData(initialData);
-    setValidations(initialInputsValid);
+    setValidationsInputs(initialInputsValid);
+    setValidationForm(false);
     setErrorsValid(initialErrorsValid);
   }
 
@@ -101,11 +95,11 @@ const AddPlacePopup = (props) => {
       isOpen={isOpen}
       onClose={handleClose}
       onSubmit={handleSubmit}
-      validationForm={validations.form}
+      validationForm={validationForm}
     >
       <input
         className={`popup__input popup__input_type_place-name 
-        ${!validations.name
+        ${!validationsInputs.name
             ? ('popup__input_state_invalid')
             : ('')
           }`}
@@ -127,7 +121,7 @@ const AddPlacePopup = (props) => {
 
       <input
         className={`popup__input popup__input_type_photo 
-        ${!validations.link
+        ${!validationsInputs.link
             ? ('popup__input_state_invalid')
             : ('')
           }`}

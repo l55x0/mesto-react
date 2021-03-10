@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PopupWithForm from './PopupWithForm';
 
 const EditAvatarPopup = (props) => {
@@ -9,26 +9,11 @@ const EditAvatarPopup = (props) => {
     onClose
   } = props;
 
-  // Дефолтное значение инпутов
-  const initialData = {
-    avatar: ''
-  };
-
-  // Дефолтное значение валидации
-  const initialInputsValid = {
-    avatar: false,
-    form: false
-  }
-
-  // Дефолтное значение ошибок валидации и сабмита
-  const initialErrorsValid = {
-    avatar: ''
-  }
-
   // Стейты компонента
-  const [data, setData] = useState(initialData);
-  const [validations, setValidations] = useState(initialInputsValid);
-  const [errorsValid, setErrorsValid] = useState(initialErrorsValid);
+  const [inputValue, setInputValue] = useState('');
+  const [validationInput, setValidationInput] = useState(false);
+  const [validationForm, setValidationForm] = useState(false);
+  const [errorValid, setErrorValid] = useState('');
 
   // Функции компонента
   // --Проверка валидности формы 
@@ -36,45 +21,29 @@ const EditAvatarPopup = (props) => {
   // --Ресет формы 
   // --Закрытие формы
   // --Сабмит формы 
+
   const checkFormValid = () => {
-    if (!validations.avatar) {
-      return setValidations((data) => ({
-        ...data,
-        form: false
-      }))
-    } else {
-      return setValidations((data) => ({
-        ...data,
-        form: true
-      }))
-    }
+    !validationInput
+      ? setValidationForm(false)
+      : setValidationForm(true);
   }
 
+  // Контроль состояния инпута
+  useEffect(checkFormValid, [validationInput])
+
   const handleChange = (e) => {
-    const { name, value, validity, validationMessage } = e.target;
+    const { value, validity, validationMessage } = e.target;
 
-    checkFormValid();
-
-    setData(data => ({
-      ...data,
-      [name]: value,
-    }));
-
-    setValidations(data => ({
-      ...data,
-      [name]: validity.valid,
-    }));
-
-    setErrorsValid(data => ({
-      ...data,
-      [name]: validationMessage,
-    }));
+    setInputValue(value);
+    setValidationInput(validity.valid);
+    setErrorValid(validationMessage);
   }
 
   const resetForm = () => {
-    setData(initialData);
-    setValidations(initialInputsValid);
-    setErrorsValid(initialErrorsValid);
+    setInputValue('');
+    setValidationInput(false);
+    setValidationForm(false);
+    setErrorValid('');
   }
 
   const handleClose = () => {
@@ -85,7 +54,7 @@ const EditAvatarPopup = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    onUpdateAvatar(data)
+    onUpdateAvatar(inputValue)
     resetForm();
   }
 
@@ -97,11 +66,11 @@ const EditAvatarPopup = (props) => {
       isOpen={isOpen}
       onClose={handleClose}
       onSubmit={handleSubmit}
-      validationForm={validations.form}
+      validationForm={validationForm}
     >
       <input
         className={`popup__input popup__input_type_photo 
-        ${!validations.avatar
+        ${!validationInput
             ? ('popup__input_state_invalid')
             : ('')
           }`}
@@ -112,13 +81,13 @@ const EditAvatarPopup = (props) => {
         onChange={handleChange}
         minLength="7"
         maxLength="300"
-        value={data.avatar}
+        value={inputValue}
         required
       />
       <span
         id="popup-input-url-avatar-error"
         className="popup__error">
-        {errorsValid.avatar}
+        {errorValid}
       </span>
     </PopupWithForm>
   );

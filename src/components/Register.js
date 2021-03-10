@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const Register = ({ onRegister }) => {
@@ -13,8 +13,7 @@ const Register = ({ onRegister }) => {
   const initialInputsValid = {
     email: false,
     password: false,
-    confirmation: false,
-    form: false
+    confirmation: false
   }
 
   // Дефолтное значение ошибок валидации и сабмита
@@ -26,7 +25,8 @@ const Register = ({ onRegister }) => {
 
   // Стейты компонента
   const [data, setData] = useState(initialData);
-  const [validations, setValidations] = useState(initialInputsValid);
+  const [validationsInputs, setValidationsInputs] = useState(initialInputsValid);
+  const [validationForm, setValidationForm] = useState(false);
   const [errorsValid, setErrorsValid] = useState(initialErrorsValid);
 
 
@@ -37,30 +37,23 @@ const Register = ({ onRegister }) => {
   // --Закрытие формы
   // --Сабмит формы 
   const checkFormValid = () => {
-    if (!validations.email || !validations.password || !validations.confirmation) {
-      return setValidations(data => ({
-        ...data,
-        form: false,
-      }));
-    } else {
-      return setValidations(data => ({
-        ...data,
-        form: true,
-      }));
-    }
+    !validationsInputs.email || !validationsInputs.password || !validationsInputs.confirmation
+      ? setValidationForm(false)
+      : setValidationForm(true);
   }
+
+  // Контроль состояния инпутов
+  useEffect(checkFormValid, [validationsInputs])
 
   const handleChange = (e) => {
     const { name, value, validity, validationMessage } = e.target;
-
-    checkFormValid()
 
     setData(data => ({
       ...data,
       [name]: value,
     }));
 
-    setValidations(data => ({
+    setValidationsInputs(data => ({
       ...data,
       [name]: validity.valid,
     }));
@@ -73,7 +66,8 @@ const Register = ({ onRegister }) => {
 
   const resetForm = () => {
     setData(initialData);
-    setValidations(initialInputsValid);
+    setValidationsInputs(initialInputsValid);
+    setValidationForm(false);
     setErrorsValid(initialErrorsValid);
   }
 
@@ -83,11 +77,10 @@ const Register = ({ onRegister }) => {
     // Проверяем совпадение паролей
     if (data.password !== data.confirmation) {
 
-      setValidations((data) => ({
+      setValidationsInputs((data) => ({
         ...data,
         password: false,
-        confirmation: false,
-        form: false
+        confirmation: false
       }));
 
       setData((data) => ({
@@ -124,7 +117,7 @@ const Register = ({ onRegister }) => {
 
           <input
             className={`register__input register__input_type_email
-        ${!validations.email
+        ${!validationsInputs.email
                 ? 'register__input_state_invalid'
                 : ''
               }`}
@@ -146,7 +139,7 @@ const Register = ({ onRegister }) => {
 
           <input
             className={`register__input register__input_type_password
-        ${!validations.password
+        ${!validationsInputs.password
                 ? 'register__input_state_invalid'
                 : ''
               }`}
@@ -168,7 +161,7 @@ const Register = ({ onRegister }) => {
 
           <input
             className={`register__input register__input_type_confirm-password
-        ${!validations.confirmation
+        ${!validationsInputs.confirmation
                 ? 'register__input_state_invalid'
                 : ''
               }`}
@@ -190,7 +183,7 @@ const Register = ({ onRegister }) => {
 
           <button
             className={`button register__button-submit 
-            ${!validations.form
+            ${!validationForm
                 ? 'register__button-submit_invalid'
                 : ''
               }`}

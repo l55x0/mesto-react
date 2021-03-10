@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Login = ({ onLogin }) => {
   // Дефолтное значение инпутов
@@ -10,8 +10,7 @@ const Login = ({ onLogin }) => {
   // Дефолтное значение валидации
   const initialInputsValid = {
     email: false,
-    password: false,
-    form: false
+    password: false
   };
 
   // Дефолтное значение ошибок валидации и сабмита
@@ -22,7 +21,8 @@ const Login = ({ onLogin }) => {
 
   // Стейты компонента
   const [data, setData] = useState(initialData);
-  const [validations, setValidations] = useState(initialInputsValid);
+  const [validationsInputs, setValidationsInputs] = useState(initialInputsValid);
+  const [validationForm, setValidationForm] = useState(false);
   const [errorsValid, setErrorsValid] = useState(initialErrorsValid);
 
   // Функции компонента
@@ -32,30 +32,23 @@ const Login = ({ onLogin }) => {
   // --Закрытие формы
   // --Сабмит формы 
   const checkFormValid = () => {
-    if (!validations.email || !validations.password) {
-      setValidations(data => ({
-        ...data,
-        form: false,
-      }));
-    } else {
-      setValidations(data => ({
-        ...data,
-        form: true,
-      }));
-    }
+    !validationsInputs.email || !validationsInputs.password
+      ? setValidationForm(false)
+      : setValidationForm(true);
   }
+
+  // Контроль состояния инпутов
+  useEffect(checkFormValid, [validationsInputs])
 
   const handleChange = (e) => {
     const { name, value, validity, validationMessage } = e.target;
-
-    checkFormValid();
 
     setData(data => ({
       ...data,
       [name]: value,
     }));
 
-    setValidations(data => ({
+    setValidationsInputs(data => ({
       ...data,
       [name]: validity.valid,
     }));
@@ -68,7 +61,8 @@ const Login = ({ onLogin }) => {
 
   const resetForm = () => {
     setData(initialData);
-    setValidations(initialInputsValid);
+    setValidationsInputs(initialInputsValid);
+    setValidationForm(false);
     setErrorsValid(initialErrorsValid);
   }
 
@@ -93,7 +87,7 @@ const Login = ({ onLogin }) => {
           onSubmit={handleSubmit}>
           <input
             className={`login__input login__input_type_email
-        ${!validations.email
+        ${!validationsInputs.email
                 ? 'login__input_state_invalid'
                 : ''
               }`}
@@ -114,7 +108,7 @@ const Login = ({ onLogin }) => {
 
           <input
             className={`login__input login__input_type_password
-        ${!validations.password
+        ${!validationsInputs.password
                 ? 'login__input_state_invalid'
                 : ''
               }`}
@@ -135,7 +129,7 @@ const Login = ({ onLogin }) => {
 
           <button
             className={`button login__button-submit 
-            ${!validations.form
+            ${!validationForm
                 ? 'login__button-submit_invalid'
                 : ''
               }`}
