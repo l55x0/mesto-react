@@ -1,105 +1,40 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import { useFormWithValidation } from "../hooks/useFormWithValidation";
 
 const Register = ({ onRegister }) => {
-  // Дефолтное значение инпутов
-  const initialData = {
-    email: '',
-    password: '',
-    confirmation: ''
-  };
 
-  // Дефолтное значение валидации
-  const initialInputsValid = {
-    email: false,
-    password: false,
-    confirmation: false
-  }
+  // Используем пользовательский Хук
+  const {
+    values,
+    handleChange,
+    resetFrom,
+    errors,
+    isValid,
+    isValidInputs
+  } = useFormWithValidation();
 
-  // Дефолтное значение ошибок валидации и сабмита
-  const initialErrorsValid = {
-    email: '',
-    password: '',
-    confirmation: ''
-  }
-
-  // Стейты компонента
-  const [data, setData] = useState(initialData);
-  const [validationsInputs, setValidationsInputs] = useState(initialInputsValid);
-  const [validationForm, setValidationForm] = useState(false);
-  const [errorsValid, setErrorsValid] = useState(initialErrorsValid);
-
-
-  // Функции компонента
-  // --Проверка валидности формы 
-  // --Проверка валидности инпуты
-  // --Ресет формы 
-  // --Закрытие формы
-  // --Сабмит формы 
-  const checkFormValid = () => {
-    !validationsInputs.email || !validationsInputs.password || !validationsInputs.confirmation
-      ? setValidationForm(false)
-      : setValidationForm(true);
-  }
-
-  // Контроль состояния инпутов
-  useEffect(checkFormValid, [validationsInputs])
-
-  const handleChange = (e) => {
-    const { name, value, validity, validationMessage } = e.target;
-
-    setData(data => ({
-      ...data,
-      [name]: value,
-    }));
-
-    setValidationsInputs(data => ({
-      ...data,
-      [name]: validity.valid,
-    }));
-
-    setErrorsValid(data => ({
-      ...data,
-      [name]: validationMessage,
-    }));
-  }
-
-  const resetForm = () => {
-    setData(initialData);
-    setValidationsInputs(initialInputsValid);
-    setValidationForm(false);
-    setErrorsValid(initialErrorsValid);
-  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     // Проверяем совпадение паролей
-    if (data.password !== data.confirmation) {
+    if (values.password !== values.confirmation) {
 
-      setValidationsInputs((data) => ({
-        ...data,
-        password: false,
-        confirmation: false
-      }));
-
-      setData((data) => ({
-        ...data,
-        password: '',
-        confirmation: ''
-      }));
-
-      setErrorsValid((data) => ({
-        ...data,
+      resetFrom({
+        email: values.email,
+      }, {
         password: 'Пароли не совпадают',
         confirmation: 'Пароли не совпадают'
-      }));
+      }, false, {
+        email: true,
+      })
       return;
     }
 
     // Запрос на сервер и обработка результата
-    onRegister(data)
-      .then(resetForm)
+    onRegister(values)
+      .then(resetFrom())
       .catch(err => {
         console.log(err.message || 'Что то пошло не так')
       })
@@ -117,8 +52,8 @@ const Register = ({ onRegister }) => {
 
           <input
             className={`register__input register__input_type_email
-        ${!validationsInputs.email
-                ? 'register__input_state_invalid'
+        ${isValidInputs.email
+                ? 'register__input_state_valid'
                 : ''
               }`}
             type="email"
@@ -127,20 +62,20 @@ const Register = ({ onRegister }) => {
             id="register-input-email"
             minLength="2"
             maxLength="100"
-            value={data.email}
+            value={values.email || ""}
             onChange={handleChange}
             required
           />
           <span
             id="register-input-email-error"
             className="register__error">
-            {errorsValid.email}
+            {errors.email || ""}
           </span>
 
           <input
             className={`register__input register__input_type_password
-        ${!validationsInputs.password
-                ? 'register__input_state_invalid'
+        ${isValidInputs.password
+                ? 'register__input_state_valid'
                 : ''
               }`}
             type="password"
@@ -149,20 +84,20 @@ const Register = ({ onRegister }) => {
             id="register-input-password"
             minLength="6"
             maxLength="50"
-            value={data.password}
+            value={values.password || ""}
             onChange={handleChange}
             required
           />
           <span
             id="register-input-password-error"
             className="register__error">
-            {errorsValid.password}
+            {errors.password || ""}
           </span>
 
           <input
             className={`register__input register__input_type_confirm-password
-        ${!validationsInputs.confirmation
-                ? 'register__input_state_invalid'
+        ${isValidInputs.confirmation
+                ? 'register__input_state_valid'
                 : ''
               }`}
             type="password"
@@ -171,19 +106,19 @@ const Register = ({ onRegister }) => {
             id="register-input-confirm-password"
             minLength="2"
             maxLength="50"
-            value={data.confirmation}
+            value={values.confirmation || ""}
             onChange={handleChange}
             required
           />
           <span
             id="register-input-confirm-password-error"
             className="register__error">
-            {errorsValid.confirmation}
+            {errors.confirmation || ""}
           </span>
 
           <button
             className={`button register__button-submit 
-            ${!validationForm
+            ${!isValid
                 ? 'register__button-submit_invalid'
                 : ''
               }`}

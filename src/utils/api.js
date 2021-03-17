@@ -30,7 +30,7 @@ class Api {
       .then(this._checkResponse)
   }
 
-  setInfoUser({ author, about }) {
+  setInfoUser({ name, about }) {
     return fetch(`${this._address}/${this._groupId}/users/me`, {
       method: 'PATCH',
       headers: {
@@ -38,8 +38,8 @@ class Api {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        name: author,
-        about,
+        name,
+        about
       })
     })
       .then(this._checkResponse)

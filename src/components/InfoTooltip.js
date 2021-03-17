@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import fail from '../images/fail.svg';
 import success from '../images/success.svg';
 import { useLocation } from 'react-router-dom';
@@ -13,28 +13,52 @@ const InfoTooltip = (props) => {
 
   const path = useLocation().pathname
 
-  const tooltip = isSuccess
-    ? path === "/sign-up"
-      ? "Вы успешно зарегистрировались!"
-      : "Вы успешно авторизовались!"
-    : path === "/sign-up"
-      ? "Что-то пошло не так! Попробуйте ещё раз."
-      : "Убедитесь в правильности введенных данных. Попробуйте ещё раз."
+  const tooltip = () => {
+    if (path === '/sign-in') {
+      return isSuccess
+        ? "Вы успешно зарегистрировались!"
+        : "Что-то пошло не так! Попробуйте ещё раз.";
+    }
+
+    if (path === '/mesto') {
+      return isSuccess
+        ? "Вы успешно авторизовались!"
+        : "Что-то пошло не так! Попробуйте ещё раз.";
+    }
+
+    return;
+  }
 
   const image = isSuccess
     ? success
     : fail
 
-  const handleClose = (e) => {
-    if (e.target.classList.contains('popup')) {
-      onClose()
+  // Реализация закрытия нажатием на ESC
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleEscapeClose = (event) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+    document.addEventListener("keydown", handleEscapeClose);
+    return () => {
+      document.removeEventListener("keydown", handleEscapeClose);
+    };
+  }, [isOpen, onClose]);
+
+  // Реализация закрытия по оверлею
+  const handleOverlayClose = (e) => {
+    if (e.target === e.currentTarget && isOpen) {
+      onClose();
     }
     return;
-  }
+  };
+
 
   return (
     <section
-      onClick={handleClose}
+      onClick={handleOverlayClose}
       className={`popup popup_type_info-tooltip ${isOpen ? 'popup_opened' : ''}`}>
       <div className="popup__container">
         <button
@@ -43,7 +67,7 @@ const InfoTooltip = (props) => {
           onClick={onClose}
         />
         <img className="popup__image-tooltip" src={image} alt={"Картинка подсказки"}></img>
-        <p className="popup__tooltip">{tooltip}</p>
+        <p className="popup__tooltip">{tooltip()}</p>
       </div>
     </section>
   )

@@ -43,12 +43,12 @@ const App = () => {
   // ---------- Функции основного Api ----------
   // Проверка наличия ответа сервера
   const responseCheck = (res) => {
-    if (!res) throw new Error(`Ошибка: ${res.message}`);
+    if (!res) throw new Error(`Error: ${res.message}`);
   }
 
   // Отправка информации на сервер
-  const handleUpdateUser = ({ author, about }) => {
-    return api.setInfoUser({ author, about })
+  const handleUpdateUser = (data) => {
+    return api.setInfoUser(data)
       .then(res => {
         responseCheck(res);
         setCurrentUser(res);
@@ -83,8 +83,7 @@ const App = () => {
     return api.changeLikeCardStatus(card._id, isLiked)
       .then(res => {
         responseCheck(res);
-        const newCards = cards.map(item => item._id === card._id ? res : item);
-        setCards(newCards);
+        setCards(state => state.map(item => item._id === card._id ? res : item));
         return res;
       })
   }
@@ -94,8 +93,7 @@ const App = () => {
     return api.removeCard(useCardId)
       .then(res => {
         responseCheck(res);
-        const newCards = cards.filter(item => item._id === useCardId ? null : item);
-        setCards(newCards);
+        setCards(state => state.filter(item => item._id === useCardId ? null : item));
         return res;
       })
   }

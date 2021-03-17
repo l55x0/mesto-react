@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const ImagePopup = (props) => {
   // Диструктуризированная переменная с пропсами
@@ -7,16 +7,29 @@ const ImagePopup = (props) => {
     onClose
   } = props;
 
-  const handleClose = (e) => {
-    if (e.target.classList.contains('popup')) {
-      onClose()
+  // Реализация закрытия нажатием на ESC
+  useEffect(() => {
+    const handleEscapeClose = (event) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+    document.addEventListener("keydown", handleEscapeClose);
+    return () => {
+      document.removeEventListener("keydown", handleEscapeClose);
+    };
+  }, [onClose]);
+
+  // Реализация закрытия по оверлею
+  const handleOverlayClose = (event) => {
+    if (event.target === event.currentTarget) {
+      onClose();
     }
-    return;
-  }
+  };
 
   return (
     <section
-      onClick={handleClose}
+      onClick={handleOverlayClose}
       className={`popup popup_blackout 
     ${card.isOpen
           ? 'popup_opened'

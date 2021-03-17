@@ -1,76 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { useFormWithValidation } from "../hooks/useFormWithValidation";
 
 const Login = ({ onLogin }) => {
-  // Дефолтное значение инпутов
-  const initialData = {
-    email: '',
-    password: '',
-  };
 
-  // Дефолтное значение валидации
-  const initialInputsValid = {
-    email: false,
-    password: false
-  };
+  // Используем пользовательский Хук
+  const {
+    values,
+    handleChange,
+    resetFrom,
+    errors,
+    isValid,
+    isValidInputs
+  } = useFormWithValidation();
 
-  // Дефолтное значение ошибок валидации и сабмита
-  const initialErrorsValid = {
-    email: '',
-    password: ''
-  };
-
-  // Стейты компонента
-  const [data, setData] = useState(initialData);
-  const [validationsInputs, setValidationsInputs] = useState(initialInputsValid);
-  const [validationForm, setValidationForm] = useState(false);
-  const [errorsValid, setErrorsValid] = useState(initialErrorsValid);
-
-  // Функции компонента
-  // --Проверка валидности формы 
-  // --Проверка валидности инпуты
-  // --Ресет формы 
-  // --Закрытие формы
-  // --Сабмит формы 
-  const checkFormValid = () => {
-    !validationsInputs.email || !validationsInputs.password
-      ? setValidationForm(false)
-      : setValidationForm(true);
-  }
-
-  // Контроль состояния инпутов
-  useEffect(checkFormValid, [validationsInputs])
-
-  const handleChange = (e) => {
-    const { name, value, validity, validationMessage } = e.target;
-
-    setData(data => ({
-      ...data,
-      [name]: value,
-    }));
-
-    setValidationsInputs(data => ({
-      ...data,
-      [name]: validity.valid,
-    }));
-
-    setErrorsValid(data => ({
-      ...data,
-      [name]: validationMessage,
-    }));
-  }
-
-  const resetForm = () => {
-    setData(initialData);
-    setValidationsInputs(initialInputsValid);
-    setValidationForm(false);
-    setErrorsValid(initialErrorsValid);
-  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    onLogin(data)
-      .then(resetForm)
+    onLogin(values)
+      .then(resetFrom())
       .catch(err => {
         console.log(err.message || 'Что то пошло не так')
       })
@@ -87,8 +35,8 @@ const Login = ({ onLogin }) => {
           onSubmit={handleSubmit}>
           <input
             className={`login__input login__input_type_email
-        ${!validationsInputs.email
-                ? 'login__input_state_invalid'
+        ${isValidInputs.email
+                ? 'login__input_state_valid'
                 : ''
               }`}
             type="email"
@@ -96,20 +44,20 @@ const Login = ({ onLogin }) => {
             name="email"
             id="login-input-email"
             maxLength="100"
-            value={data.email}
+            value={values.email || ''}
             onChange={handleChange}
             required
           />
           <span
             id="login-input-email-error"
             className="login__error">
-            {errorsValid.email}
+            {errors.email || ""}
           </span>
 
           <input
             className={`login__input login__input_type_password
-        ${!validationsInputs.password
-                ? 'login__input_state_invalid'
+        ${isValidInputs.password
+                ? 'login__input_state_valid'
                 : ''
               }`}
             type="password"
@@ -117,19 +65,19 @@ const Login = ({ onLogin }) => {
             name="password"
             id="login-input-password"
             maxLength="50"
-            value={data.password}
+            value={values.password || ""}
             onChange={handleChange}
             required
           />
           <span
             id="login-input-password-error"
             className="login__error">
-            {errorsValid.password}
+            {errors.password || ""}
           </span>
 
           <button
             className={`button login__button-submit 
-            ${!validationForm
+            ${!isValid
                 ? 'login__button-submit_invalid'
                 : ''
               }`}

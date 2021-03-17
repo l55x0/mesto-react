@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import PopupWithForm from './PopupWithForm';
+import { useFormWithValidation } from "../hooks/useFormWithValidation";
 
 const AddPlacePopup = (props) => {
   // Диструктуризированная переменная с пропсами
@@ -9,98 +10,40 @@ const AddPlacePopup = (props) => {
     onClose
   } = props;
 
-  // Дефолтное значение инпутов
-  const initialData = {
-    name: '',
-    link: ''
-  };
+  // Используем пользовательский Хук
+  const {
+    values,
+    handleChange,
+    resetFrom,
+    errors,
+    isValid,
+    isValidInputs
+  } = useFormWithValidation();
 
-  // Дефолтное значение валидации инпутов
-  const initialInputsValid = {
-    name: false,
-    link: false
-  }
-
-  // Дефолтное значение ошибок валидации и сабмита
-  const initialErrorsValid = {
-    name: '',
-    link: ''
-  }
-
-  // Стейты компонента
-  const [data, setData] = useState(initialData);
-  const [validationsInputs, setValidationsInputs] = useState(initialInputsValid);
-  const [validationForm, setValidationForm] = useState(false);
-  const [errorsValid, setErrorsValid] = useState(initialErrorsValid);
-
-  // Функции компонента
-  // --Проверка валидности формы 
-  // --Проверка валидности инпуты
-  // --Ресет формы 
-  // --Закрытие формы
-  // --Сабмит формы 
-  const checkFormValid = () => {
-    !validationsInputs.name || !validationsInputs.link
-      ? setValidationForm(false)
-      : setValidationForm(true);
-  }
-
-  // Контроль состояния инпутов
-  useEffect(checkFormValid, [validationsInputs])
-
-  const handleChange = (e) => {
-    const { name, value, validity, validationMessage } = e.target;
-
-    setData(data => ({
-      ...data,
-      [name]: value,
-    }));
-
-    setValidationsInputs(data => ({
-      ...data,
-      [name]: validity.valid
-    }));
-
-    setErrorsValid(data => ({
-      ...data,
-      [name]: validationMessage,
-    }));
-  }
-
-  const resetForm = () => {
-    setData(initialData);
-    setValidationsInputs(initialInputsValid);
-    setValidationForm(false);
-    setErrorsValid(initialErrorsValid);
-  }
-
-  const handleClose = () => {
-    onClose()
-    resetForm()
-  }
-
+  // Контроль за открытием попапа и ресетом
+  useEffect(() => {
+    resetFrom()
+  }, [isOpen, resetFrom]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    onAddPlace(data)
-    resetForm()
+    onAddPlace(values)
   }
 
   return (
     <PopupWithForm
       name="add-card"
       title="Новое место"
-      textButton="Создать"
+      textButton="Сохранить"
       isOpen={isOpen}
-      onClose={handleClose}
+      onClose={onClose}
       onSubmit={handleSubmit}
-      validationForm={validationForm}
+      isDisabled={!isValid}
     >
       <input
         className={`popup__input popup__input_type_place-name 
-        ${!validationsInputs.name
-            ? ('popup__input_state_invalid')
+        ${isValidInputs.name
+            ? ('popup__input_state_valid')
             : ('')
           }`}
         type="text"
@@ -109,20 +52,20 @@ const AddPlacePopup = (props) => {
         id="popup-input-place-name"
         minLength="2"
         maxLength="30"
-        value={data.name}
+        value={values.name || ""}
         onChange={handleChange}
         required
       />
       <span
         id="popup-input-place-name-error"
         className="popup__error">
-        {errorsValid.name}
+        {errors.name || ""}
       </span>
 
       <input
         className={`popup__input popup__input_type_photo 
-        ${!validationsInputs.link
-            ? ('popup__input_state_invalid')
+        ${isValidInputs.link
+            ? ('popup__input_state_valid')
             : ('')
           }`}
         type="url"
@@ -131,14 +74,14 @@ const AddPlacePopup = (props) => {
         name="link"
         minLength="7"
         maxLength="300"
-        value={data.link}
+        value={values.link || ""}
         onChange={handleChange}
         required
       />
       <span
         id="popup-input-url-error"
         className="popup__error">
-        {errorsValid.link}
+        {errors.link || ""}
       </span>
     </PopupWithForm>
   );
