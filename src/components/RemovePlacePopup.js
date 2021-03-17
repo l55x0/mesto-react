@@ -23,7 +23,7 @@ const RemovePlacePopup = (props) => {
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
-      validationForm={true} />
+    />
   );
 }
 

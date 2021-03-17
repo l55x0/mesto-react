@@ -118,10 +118,13 @@ const App = () => {
 
   // ---------- Функции запросов api/auth ----------
   // Проверка токена пользователя на подленность на сервере
+  // проверка, что пользователь уже авторизован
+  const [isAuthChecking, setIsAuthChecking] = useState(true);
   const tokenCheck = useCallback(() => {
     const jwt = localStorage.getItem('jwt');
 
     if (jwt) {
+      setIsAuthChecking(true);
       auth.getContent(jwt)
         .then((res) => {
           if (res) {
@@ -132,7 +135,10 @@ const App = () => {
             history.push('/mesto');
           }
         })
-        .catch(() => history.push('/sign-in'));
+        .catch(() => history.push('/sign-in'))
+        .finally(() => setIsAuthChecking(false))
+    } else {
+      setIsAuthChecking(false)
     }
   }, [history])
 
@@ -196,8 +202,10 @@ const App = () => {
 
         <Switch>
           <ProtectedRoute
-            path="/mesto"
-            loggedIn={loggedIn}>
+            path="/"
+            loggedIn={loggedIn}
+            isChecking={isAuthChecking}
+            exact>
             <Main
               onCardDelete={handleCardDelete}
               onCardLike={handleCardLike}
@@ -219,7 +227,7 @@ const App = () => {
 
           <Route path="*">
             {loggedIn
-              ? <Redirect to="/mesto" />
+              ? <Redirect to="/" />
               : <Redirect to="/sign-in" />}
           </Route>
         </Switch>

@@ -14,7 +14,7 @@ const InfoTooltip = (props) => {
   const path = useLocation().pathname
 
   const tooltip = () => {
-    if (path === '/sign-in') {
+    if (path === '/sign-in' || path === '/sign-up') {
       return isSuccess
         ? "Вы успешно зарегистрировались!"
         : "Что-то пошло не так! Попробуйте ещё раз.";
@@ -23,7 +23,7 @@ const InfoTooltip = (props) => {
     if (path === '/mesto') {
       return isSuccess
         ? "Вы успешно авторизовались!"
-        : "Что-то пошло не так! Попробуйте ещё раз.";
+        : "Что-то пошло не так!";
     }
 
     return;
