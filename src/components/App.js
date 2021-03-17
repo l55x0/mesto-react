@@ -202,7 +202,7 @@ const App = () => {
 
         <Switch>
           <ProtectedRoute
-            path="/"
+            path="/mesto"
             loggedIn={loggedIn}
             isChecking={isAuthChecking}
             exact>
@@ -227,7 +227,7 @@ const App = () => {
 
           <Route path="*">
             {loggedIn
-              ? <Redirect to="/" />
+              ? <Redirect to="/mesto" />
               : <Redirect to="/sign-in" />}
           </Route>
         </Switch>
