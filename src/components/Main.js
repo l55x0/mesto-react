@@ -67,8 +67,8 @@ const Main = (props) => {
       .catch(err => console.log(`Error: ${err}`));
   }
 
-  const handleUpdateAvatar = (src) => {
-    onUpdateAvatar(src)
+  const handleUpdateAvatar = (data) => {
+    onUpdateAvatar(data.avatar)
       .then(closeAllPopups)
       .catch(err => console.log(`Error: ${err}`));
   }
